@@ -22,31 +22,15 @@ define jenv::candidate (
 		}
 	}
 
-	if $do == 'install' {
-		exec { "jenv::${candidate}::${do} ${user_}":
-			command		=> "bash --login -c 'echo ${default} | jenv ${do} ${candidate} ${version} ${source}'",
-			user		=> $user,
-			group		=> $group,
-			onlyif		=> "[ ! -d '${home_path}/.jenv/candidates/${candidate}/${version}' ]",
-			environment     => [ "HOME=${home_path}" ],
-			path 		=> ['/bin', '/usr/bin', '/usr/sbin'],
-    			timeout 	=> 720,
-			tries		=> '2',
-    			cwd 		=> $home_path,
-			require		=> Exec["jenv::install::$user"],
-		}
-	} else {
-		exec { "jenv::${candidate}::${do} ${user_}":
-                        command         => "bash --login -c 'echo ${default} | jenv ${do} ${candidate} ${version} ${source}'",
-                        user            => $user,
-                        group           => $group,
-			onlyif          => "[ -d '${home_path}/.jenv/candidates/${candidate}/${version}' ]",
-                        environment     => [ "HOME=${home_path}" ],
-                        path            => ['/bin', '/usr/bin', '/usr/sbin'],
-                        timeout         => 720,
-			tries		=> '2',
-                        cwd             => $home_path,
-                        require         => Exec["jenv::install::$user"],
-                }
-	}	
+	exec { "jenv::${candidate}::${do} ${user}":
+		command		=> "bash --login -c 'jenv ${do} ${candidate} ${version} ${source}'",
+		user		=> $user,
+		group		=> $group,
+		environment     => [ "HOME=${home_path}", "JENV_AUTO=true" ],
+		path 		=> ['/bin', '/usr/bin', '/usr/sbin'],
+		timeout 	=> 720,
+		tries		=> '2',
+		cwd 		=> $home_path,
+		require		=> Exec["jenv::install::$user"],
+	}
 }
