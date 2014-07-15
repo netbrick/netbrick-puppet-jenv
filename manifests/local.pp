@@ -5,11 +5,20 @@ define jenv::local (
 	$candidate,
 	$version,
 ) {
-	file { "jenv::local::${candidate}::${user}":
-		path	=> "${path}/.jenvrc,
-		owner	=> $user,
-		group	=> group,
-		mode	=> 644,
-		line	=> "${candidate}=${version}",
-	} 
+	if ! defined( File["jenv::local::${path}::${user}"] ) {
+		file { "jenv::local::${path}::${user}":
+			ensure	=> present,
+			path	=> "${path}/.jenvrc",
+			owner	=> $user,
+			group	=> $group,
+			mode	=> 644,
+		} 
+	}
+
+	file_line { "jenv::local::${path}::${candidate}::${user}":
+                path    => "${path}/.jenvrc",
+                line    => "${candidate}=${version}",
+                require => File["jenv::local::${path}::${user}"],
+        }
+
 }
