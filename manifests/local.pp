@@ -5,7 +5,7 @@ define jenv::local (
 	$candidate,
 	$version,
 ) {
-	file { "jenv::local::${candidate}":
+	file { "jenv::local::${candidate}::${user}":
 		path	=> "${path}/.jenvrc,
 		owner	=> $user,
 		group	=> group,
