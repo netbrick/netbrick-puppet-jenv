@@ -23,10 +23,10 @@ define jenv::candidate (
 	}
 
 	exec { "jenv::${candidate}::${do} ${user}":
-		command		=> "bash --login -c 'jenv ${do} ${candidate} ${version} ${source}'",
+		command		=> "bash --login -c 'echo ${default} | jenv ${do} ${candidate} ${version} ${source}'",
 		user		=> $user,
 		group		=> $group,
-		environment     => [ "HOME=${home_path}", "JENV_AUTO=true" ],
+		environment     => [ "HOME=${home_path}" ],
 		path 		=> ['/bin', '/usr/bin', '/usr/sbin'],
 		timeout 	=> 720,
 		tries		=> '2',
