@@ -6,7 +6,7 @@ define jenv::local (
 	$version,
 ) {
 	file { "jenv::local::${candidate}":
-		path	=> $path,
+		path	=> "${path}/.jenvrc,
 		owner	=> $user,
 		group	=> group,
 		mode	=> 644,
