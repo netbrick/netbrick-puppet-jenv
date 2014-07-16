@@ -22,7 +22,7 @@ define jenv::candidate (
 		}
 	}
 
-	exec { "jenv::${candidate}::${version}::${do} ${user}":
+	exec { "jenv::${candidate}::${version}::${do}::${user}":
 		command		=> "bash --login -c 'echo ${default} | jenv ${do} ${candidate} ${version} ${source}'",
 		user		=> $user,
 		group		=> $group,
@@ -31,6 +31,6 @@ define jenv::candidate (
 		timeout 	=> 720,
 		tries		=> '2',
 		cwd 		=> $home_path,
-		require		=> Exec["jenv::install::$user"],
+		require		=> Jenv::Install[$user],
 	}
 }
