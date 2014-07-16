@@ -6,12 +6,12 @@ define jenv::candidate (
 	$home		= '',
 	$command	= '',
 	$source		= '',
-	$set_default	= true,
+	$set_default	= false,
 ) {
 	$home_path	= $home ? { '' => "/home/${user}", default => $home }
 	$do		= $command ? { '' => 'install', default => $command }
 
-	$default	= $set_default ? { true => 'Y', default => 'N' }
+	$default	= $set_default ? { false => 'N', default => 'Y' }
 
 	if ! defined( Jenv::Install[$user] ) {
 		debug( "Jenv is not installed for ${user}" )
@@ -22,7 +22,7 @@ define jenv::candidate (
 		}
 	}
 
-	exec { "jenv::${candidate}::${do} ${user}":
+	exec { "jenv::${candidate}::${version}::${do} ${user}":
 		command		=> "bash --login -c 'echo ${default} | jenv ${do} ${candidate} ${version} ${source}'",
 		user		=> $user,
 		group		=> $group,
