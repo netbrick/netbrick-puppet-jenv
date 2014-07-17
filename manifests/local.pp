@@ -5,10 +5,11 @@ define jenv::local (
 	$candidate,
 	$version,
 ) {
+
 	if ! defined( File["jenv::local::${path}::${user}"] ) {
 		file { "jenv::local::${path}::${user}":
 			ensure	=> present,
-			path	=> "${path}/.jenvrc",
+			path	=> $path,
 			owner	=> $user,
 			group	=> $group,
 			mode	=> 644,
