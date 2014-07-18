@@ -12,7 +12,7 @@ define jenv::install (
 
 	file_line { "jenv::install::profile::${user}":
                 path    => "${home_path}/.profile",
-                line    => "[[ -s \"${jenv_path}/bin/jenv-init.sh\" ]] && source \"${jenv_path}/bin/jenv-init.sh\" && source \"${jenv_path}/commands/completion.sh\"",
+                line    => "source \"${jenv_path}/bin/jenv-init.sh\" && source \"${jenv_path}/commands/completion.sh\"",
         }	
 
 	exec { "jenv::install::download::${user}":
