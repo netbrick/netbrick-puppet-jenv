@@ -4,11 +4,14 @@ define jenv::candidate (
 	$version,
 	$group		= $user,
 	$home		= '',
+	$jenv		= '',
 	$command	= '',
 	$source		= '',
 	$set_default	= false,
 ) {
 	$home_path	= $home ? { '' => "/home/${user}", default => $home }
+	$jenv_path      = $jenv ? { '' => "${home_path}/.jenv", default => $jenv }
+
 	$do		= $command ? { '' => 'install', default => $command }
 
 	$default	= $set_default ? { false => 'N', default => 'Y' }
@@ -19,6 +22,7 @@ define jenv::candidate (
 
 		jenv::install { $user:
 			home	=> $home_path,
+			jenv	=> $jenv_path,
 		}
 	}
 

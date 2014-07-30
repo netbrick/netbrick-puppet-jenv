@@ -2,10 +2,12 @@ define jenv::global (
 	$user		= $title,
 	$group		= $user,
 	$home		= '',
+	$jenv		= '',
 	$candidate,
 	$version,
 ) {
 	$home_path	= $home ? { '' => "/home/${user}", default => $home }
+	$jenv_path      = $jenv ? { '' => "${home_path}/.jenv", default => $jenv }
 
 	if ! defined( Jenv::Candidate["jenv::${candidate}::${version}::install ${user}"] ) {
 		debug( "Candidate ${candidate} ${version} is not installed" )
@@ -14,6 +16,7 @@ define jenv::global (
 		jenv::candidate { "${candidate}::${version}::${user}":
 			user		=> $user,
 			home		=> $home_path,
+			jenv		=> $jenv_path,
 			candidate	=> $candidate,
 			version		=> $version,
 		} 

@@ -2,18 +2,14 @@ define jenv::install (
 	$user	= $title,
 	$group	= $user,
 	$home	= '',
+	$jenv	= '',
 ) {
 	$home_path	= $home ? { '' => "/home/${user}", default => $home }
-	$jenv_path	= "${home_path}/.jenv"
+	$jenv_path	= $jenv ? { '' => "${home_path}/.jenv", default => $jenv }
 
 	if ! defined( Class['jenv::dependencies'] ) {
 		require jenv::dependencies
 	}
-
-	file_line { "jenv::install::profile::${user}":
-                path    => "${home_path}/.profile",
-                line    => "source \"${jenv_path}/bin/jenv-init.sh\" && source \"${jenv_path}/commands/completion.sh\"",
-        }	
 
 	exec { "jenv::install::download::${user}":
 		command		=> "git clone https://github.com/netbrick/jenv.git ${jenv_path}",
@@ -29,7 +25,7 @@ define jenv::install (
 	}	
 
 	exec { "jenv::install:init::${user}":
-		command         => "${jenv_path}/bin/jenv-init.sh",
+		command         => "bash ${jenv_path}/commands/install.sh",
                 user            => $user,
                 group           => $group,
                 environment     => [ "HOME=${home_path}" ],
